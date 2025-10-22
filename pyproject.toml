@@ -173,6 +173,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 												 "PLR",
 												 "E",
 												 "SLF",
+												 "N"
 												 ]
 
 [tool.ruff.lint.flake8-annotations]
