@@ -3,8 +3,7 @@ import datetime as dt
 import pathlib
 
 import spherapy
-from spherapy.util import epoch_u, spacetrack
-import spherapy.util.spacetrack as celestrak
+from spherapy.util import celestrak, epoch_u, spacetrack
 
 
 def updateTLEs(sat_id_list: list[int]) -> list[int]:

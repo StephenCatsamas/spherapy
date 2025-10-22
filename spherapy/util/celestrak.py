@@ -43,7 +43,7 @@ def updateTLEs(sat_id_list:list[int]) -> list[int]:
 		while retry_num < MAX_RETRIES:
 			retry_num += 1
 			r = requests.get(url, timeout=TIMEOUT)
-			if r.status_code == requests.codes.success:
+			if r.status_code == requests.codes.ok:
 				fetch_successful = True
 				tle_file = getTLEFilePath(sat_id)
 				dat_list = r.text.split('\r\n')
