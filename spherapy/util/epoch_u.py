@@ -147,3 +147,63 @@ def getStoredEpochs(tle_path:pathlib.Path) -> None|tuple[dt.datetime, dt.datetim
 	last_epoch_dt = epoch2datetime(last_tle_line_1['fields'][3])
 
 	return (first_epoch_dt, last_epoch_dt)
+
+def getAllStoredEpochs(tle_path:pathlib.Path) -> None|list[dt.datetime]:
+	"""Return the all TLE epochs for tle_path.
+
+	Args:
+		tle_path: tle file
+
+	Returns:
+		list of datetime object equivalent to the TLE epoch for each TLE
+		None if no spacetrack tle stored for sat_id
+	"""
+	if not tle_path.exists():
+		return None
+
+	with tle_path.open('r') as fp:
+		lines = fp.readlines()
+
+	tle_epochs_dt = []
+	for ii in range(1,len(lines),3):
+		tle_line = elements_u.split3LELineIntoFields(lines[ii])
+		tle_epochs_dt.append(epoch2datetime(tle_line['fields'][3]))
+
+
+	return tle_epochs_dt
+
+def getStoredTLEByIdx(tle_path:pathlib.Path, idx_list:int|list[int], string_only:bool=True) -> list:
+	"""Return the TLE at the Idx within tle_path specifed by idx_list.
+
+	Args:
+		tle_path: tle file
+		idx_list: list of TLE indices within tle_path
+		string_only: if true, return only the raw TLE string,
+					if false returns a dict of each field within each line
+
+	Returns:
+		list of tle_data
+	"""
+	if not tle_path.exists():
+		return None
+
+	if isinstance(idx_list, int):
+		idx_list = [idx_list]
+
+	with tle_path.open('r') as fp:
+		lines = fp.readlines()
+
+	tles = []
+	for idx in idx_list:
+		tle_line_0 = elements_u.split3LELineIntoFields(lines[idx*3+0])
+		tle_line_1 = elements_u.split3LELineIntoFields(lines[idx*3+1])
+		tle_line_2 = elements_u.split3LELineIntoFields(lines[idx*3+2])
+
+		if string_only:
+			tle_data = f"{tle_line_0['line_str']}{tle_line_1['line_str']}{tle_line_2['line_str']}"
+		else:
+			tle_data = {0:tle_line_0, 1:tle_line_1, 2:tle_line_2}
+
+		tles.append(tle_data)
+
+	return tles
