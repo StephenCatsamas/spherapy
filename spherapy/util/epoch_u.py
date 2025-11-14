@@ -172,7 +172,9 @@ def getAllStoredEpochs(tle_path:pathlib.Path) -> None|list[dt.datetime]:
 
 	return tle_epochs_dt
 
-def getStoredTLEByIdx(tle_path:pathlib.Path, idx_list:int|list[int], string_only:bool=True) -> list:
+def getStoredTLEByIdx(tle_path:pathlib.Path,
+						idx_list:int|list[int],
+						string_only:bool=True) -> list|None:
 	"""Return the TLE at the Idx within tle_path specifed by idx_list.
 
 	Args:
