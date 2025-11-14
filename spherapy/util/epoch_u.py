@@ -174,7 +174,8 @@ def getAllStoredEpochs(tle_path:pathlib.Path) -> None|list[dt.datetime]:
 
 def getStoredTLEByIdx(tle_path:pathlib.Path,
 						idx_list:int|list[int],
-						string_only:bool=True) -> list|None:
+						string_only:bool=True) \
+							-> list[dict[int, elements_u.ElementsLineDict]]|list[str]|None:
 	"""Return the TLE at the Idx within tle_path specifed by idx_list.
 
 	Args:
@@ -204,7 +205,7 @@ def getStoredTLEByIdx(tle_path:pathlib.Path,
 		if string_only:
 			tle_data = f"{tle_line_0['line_str']}{tle_line_1['line_str']}{tle_line_2['line_str']}"
 		else:
-			tle_data = {0:tle_line_0, 1:tle_line_1, 2:tle_line_2}
+			tle_data = {0:tle_line_0, 1:tle_line_1, 2:tle_line_2} 	#type:ignore
 
 		tles.append(tle_data)
 
