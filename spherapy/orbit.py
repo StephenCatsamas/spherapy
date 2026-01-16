@@ -15,6 +15,7 @@ from typing import Any, TypedDict, cast
 from astropy import units as astropy_units
 from astropy.time import Time as astropyTime
 from hapsira.bodies import Earth, Mars, Moon, Sun
+from hapsira.constants import J2000
 from hapsira.ephem import Ephem
 from hapsira.twobody import Orbit as hapsiraOrbit
 import numpy as np
