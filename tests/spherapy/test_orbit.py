@@ -561,3 +561,19 @@ def test_analyticalValidity():
 		# Circular orbit should have the same orbital speed for its duration
 		speed = orbital_u.calcOrbitalVel(a * 1e3, np.array((a * 1e3, 0, 0)))
 		check.is_true(np.all(np.isclose(np.linalg.norm(o.vel, axis=1), speed)))
+
+
+def test_epoch():
+		'''
+		Test that the epoch argument is correctly interpreted
+		'''
+
+		t0 = dt.datetime.fromisoformat('2026-03-20T14:46:00+00.00') # this is the vernal equinox so sun should be at raan
+		t = timespan.TimeSpan(t0, '1S', '1S')
+		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=6378+600, ecc=0.4, inc=45, raan=0, argp=0, true_nu=0, epoch=t.asAstropy(0))
+
+		def unit_vector(v:np.NDArray) -> np.NDArray:
+			return v/np.linalg.norm(v)
+
+		# an orbit with raan=argp=true_nu=0 with epoch at vernal equinox should be at the sub solar point
+		check.is_true(np.all(np.isclose(unit_vector(o.pos[0]), unit_vector(o.sun_pos[0]), atol=0.01)))
