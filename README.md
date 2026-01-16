@@ -53,7 +53,7 @@ o = spherapy.orbit.Orbit.fromAnalyticalOrbitalParam(timespan, body='Earth',
 					 inc=0,
 					 raan=0,
 					 argp=0,
-					 mean_nu=0,
+					 true_nu=0,
 					 name='My Analytical Orbit',
 					 astrobodies=True)
 ```  
@@ -81,7 +81,7 @@ o = spherapy.orbit.Orbit.fromAnalyticalOrbitalParam(timespan, body='Earth',
 					 inc=0,
 					 raan=0,
 					 argp=0,
-					 mean_nu=0,
+					 true_nu=0,
 					 name='My Analytical Orbit',
 					 astrobodies=True)
 ```
