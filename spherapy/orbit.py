@@ -653,8 +653,10 @@ class Orbit:
 			argp: [Optional] argument of the perigee in degrees
 					Default is 0, which	represents an orbit with its semimajor axis in
 					the plane of the Earth's equator
-			true_nu: [Optional] true anomaly at J2000 in degrees
-					Default is 0, which represents an orbit that is beginning at periapsis on J2000
+			true_nu: [Optional] true anomaly at epoch in degrees
+					Default is 0, which represents an orbit that is beginning at periapsis on the epoch
+			epoch: [Optional] epoch for orbit
+					Default is J2000 
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
 			astrobodies: [Optional] Flag to calculate Sun and Moon positions at timestamps
