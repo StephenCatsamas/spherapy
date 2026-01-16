@@ -44,8 +44,8 @@ def propagationData(pytestFillPackagedData:None) -> dict: 			#noqa: ARG001
 	data['o_ftle_astro'] = orbit.Orbit.fromPropagatedOrbitalParam(data['t'], a=(6378 + 600), ecc=0, inc=45, raan=0, argp=0, mean_nu=0, astrobodies=True)
 
 	# Analytic from orbital param
-	data['o_analytical'] = orbit.Orbit.fromAnalyticalOrbitalParam(data['t'], a=(6378 + 600), ecc=0, inc=45, raan=0, argp=0, mean_nu=0)
-	data['o_analytical_astro'] = orbit.Orbit.fromAnalyticalOrbitalParam(data['t'], a=(6378 + 600), ecc=0, inc=45, raan=0, argp=0, mean_nu=0, astrobodies=True)
+	data['o_analytical'] = orbit.Orbit.fromAnalyticalOrbitalParam(data['t'], a=(6378 + 600), ecc=0, inc=45, raan=0, argp=0, true_nu=0)
+	data['o_analytical_astro'] = orbit.Orbit.fromAnalyticalOrbitalParam(data['t'], a=(6378 + 600), ecc=0, inc=45, raan=0, argp=0, true_nu=0, astrobodies=True)
 
 	# From list of position
 	data['o_poslist'] = orbit.Orbit.fromListOfPositions(data['t'], data['pos'])
@@ -554,7 +554,7 @@ def test_analyticalValidity():
 		t0 = dt.datetime(2021, 1, 1, 0, 0, 1)
 		t = timespan.TimeSpan(t0, '1S', '180M')
 		a = 6378+600
-		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=a, ecc=0, inc=45, raan=0, argp=0, mean_nu=0)
+		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=a, ecc=0, inc=45, raan=0, argp=0, true_nu=0)
 
 		# Circular orbit should have the same semi-major for its duration
 		check.is_true(np.all(np.isclose(np.linalg.norm(o.pos, axis=1), a)))

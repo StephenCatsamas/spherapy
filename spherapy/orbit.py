@@ -626,7 +626,7 @@ class Orbit:
 											inc:float=0,
 											raan:float=0,
 											argp:float=0,
-											mean_nu:float=0,
+											true_nu:float=0,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':
@@ -651,7 +651,7 @@ class Orbit:
 			argp: [Optional] argument of the perigee in degrees
 					Default is 0, which	represents an orbit with its semimajor axis in
 					the plane of the Earth's equator
-			mean_nu: [Optional] mean anomaly in degrees
+			true_nu: [Optional] true anomaly in degrees
 					Default is 0, which represents an orbit that is beginning at periapsis
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
@@ -705,10 +705,10 @@ class Orbit:
 			raise exceptions.OutOfRangeError(f"Argument of periapsis, {raan}, is out of "
 										f"range, should be 0 < argp < 360")
 
-		if mean_nu > 360 or mean_nu < 0: 		#noqa: PLR2004
-			logger.error("Mean anomaly, %s, is out of range, should be 0 < mean_nu < 360", mean_nu)
-			raise exceptions.OutOfRangeError(f"Mean anomaly, {mean_nu}, is out of range, "
-										f"should be 0 < mean_nu < 360")
+		if true_nu > 360 or true_nu < 0: 		#noqa: PLR2004
+			logger.error("True anomaly, %s, is out of range, should be 0 < true_nu < 360", true_nu)
+			raise exceptions.OutOfRangeError(f"True anomaly, {true_nu}, is out of range, "
+										f"should be 0 < true_nu < 360")
 
 		attr_dct = _createEmptyOrbitAttrDict()
 
@@ -719,7 +719,7 @@ class Orbit:
 											inc * astropy_units.one * astropy_units.deg,
 											raan * astropy_units.one * astropy_units.deg,
 											argp * astropy_units.one * astropy_units.deg,
-											mean_nu * astropy_units.one * astropy_units.deg)
+											true_nu * astropy_units.one * astropy_units.deg)
 
 
 		logger.info("Creating ephemeris for orbit, using timespan")
