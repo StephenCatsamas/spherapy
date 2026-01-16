@@ -656,7 +656,7 @@ class Orbit:
 			true_nu: [Optional] true anomaly at epoch in degrees
 					Default is 0, which represents an orbit that is beginning at periapsis on the epoch
 			epoch: [Optional] epoch for orbit
-					Default is J2000 
+					Default is J2000
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
 			astrobodies: [Optional] Flag to calculate Sun and Moon positions at timestamps
