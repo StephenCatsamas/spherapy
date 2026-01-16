@@ -14,6 +14,7 @@ from typing import Any, TypedDict, cast
 
 from astropy import units as astropy_units
 from astropy.time import Time as astropyTime
+from hapsira.constants import J2000
 from hapsira.bodies import Earth, Mars, Moon, Sun
 from hapsira.ephem import Ephem
 from hapsira.twobody import Orbit as hapsiraOrbit
@@ -627,6 +628,7 @@ class Orbit:
 											raan:float=0,
 											argp:float=0,
 											true_nu:float=0,
+											epoch:astropyTime=J2000,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':
@@ -651,8 +653,10 @@ class Orbit:
 			argp: [Optional] argument of the perigee in degrees
 					Default is 0, which	represents an orbit with its semimajor axis in
 					the plane of the Earth's equator
-			true_nu: [Optional] true anomaly at J2000 in degrees
-					Default is 0, which represents an orbit that is beginning at periapsis on J2000
+			true_nu: [Optional] true anomaly at epoch in degrees
+					Default is 0, which represents an orbit that is beginning at periapsis on the epoch
+			epoch: [Optional] epoch for orbit
+					Default is J2000 
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
 			astrobodies: [Optional] Flag to calculate Sun and Moon positions at timestamps
@@ -713,13 +717,16 @@ class Orbit:
 		attr_dct = _createEmptyOrbitAttrDict()
 
 		logger.info("Creating analytical orbit")
-		orb = hapsiraOrbit.from_classical(central_body,
-											a * astropy_units.one * astropy_units.km,
-											ecc * astropy_units.one,
-											inc * astropy_units.one * astropy_units.deg,
-											raan * astropy_units.one * astropy_units.deg,
-											argp * astropy_units.one * astropy_units.deg,
-											true_nu * astropy_units.one * astropy_units.deg)
+		orb = hapsiraOrbit.from_classical(
+											attractor=central_body,
+											a=a * astropy_units.one * astropy_units.km,
+											ecc=ecc * astropy_units.one,
+											inc=inc * astropy_units.one * astropy_units.deg,
+											raan=raan * astropy_units.one * astropy_units.deg,
+											argp=argp * astropy_units.one * astropy_units.deg,
+											nu=true_nu * astropy_units.one * astropy_units.deg,
+											epoch=epoch
+											)
 
 
 		logger.info("Creating ephemeris for orbit, using timespan")
