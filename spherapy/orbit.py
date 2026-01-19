@@ -628,7 +628,7 @@ class Orbit:
 											raan:float=0,
 											argp:float=0,
 											true_nu:float=0,
-											epoch:astropyTime=J2000,
+											epoch:dt.datetime|astropyTime=J2000,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':
@@ -714,7 +714,19 @@ class Orbit:
 			raise exceptions.OutOfRangeError(f"True anomaly, {true_nu}, is out of range, "
 										f"should be 0 < true_nu < 360")
 
+		if isinstance(epoch, dt.datetime):
+			astropy_epoch = astropyTime(epoch, scale='utc')
+		elif isinstance(epoch, astropyTime):
+			astropy_epoch = epoch
+		else:
+			logger.error("epoch, %s must be of type dt.datetime|astropyTime but"
+											" is of type %s", epoch, type(epoch))
+			raise TypeError(f"epoch, {epoch} must be of type "
+						f"dt.datetime|astropyTime but is of type {type(epoch)}")
+
 		attr_dct = _createEmptyOrbitAttrDict()
+
+
 
 		logger.info("Creating analytical orbit")
 		orb = hapsiraOrbit.from_classical(
@@ -725,7 +737,7 @@ class Orbit:
 											raan=raan * astropy_units.one * astropy_units.deg,
 											argp=argp * astropy_units.one * astropy_units.deg,
 											nu=true_nu * astropy_units.one * astropy_units.deg,
-											epoch=epoch
+											epoch=astropy_epoch
 											)
 
 
