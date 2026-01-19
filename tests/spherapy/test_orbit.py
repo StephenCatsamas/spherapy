@@ -570,7 +570,7 @@ def test_epoch():
 		Test that the epoch argument is correctly interpreted
 		'''
 
-		t0 = dt.datetime.fromisoformat('2026-03-20T14:46:00+00.00') # this is the vernal equinox so sun should be at raan
+		t0 = dt.datetime.fromisoformat('2026-03-20T14:46:00+00:00') # this is the vernal equinox so sun should be at raan
 		t = timespan.TimeSpan(t0, '1S', '1S')
 		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=6378+600, ecc=0.4, inc=45, raan=0, argp=0, true_nu=0, epoch=t[0])
 
