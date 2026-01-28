@@ -565,14 +565,14 @@ def test_analyticalValidity():
 		check.is_true(np.all(np.isclose(np.linalg.norm(o.vel, axis=1), speed)))
 
 
-def test_epoch():
+def test_fromAnalyticalOrbitalParams_epoch():
 		'''
-		Test that the epoch argument is correctly interpreted
+		Test that the epoch argument is set to the correct default value
 		'''
 
 		t0 = dt.datetime.fromisoformat('2026-03-20T14:46:00+00:00') # this is the vernal equinox so sun should be at raan
 		t = timespan.TimeSpan(t0, '1S', '1S')
-		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=6378+600, ecc=0.4, inc=45, raan=0, argp=0, true_nu=0, epoch=t[0])
+		o = orbit.Orbit.fromAnalyticalOrbitalParam(t, a=6378+600, ecc=0.4, inc=45, raan=0, argp=0, true_nu=0)
 
 		def unit_vector(v : NDArray) -> NDArray:
 			return v/np.linalg.norm(v)
@@ -580,4 +580,23 @@ def test_epoch():
 		# an orbit with raan=argp=true_nu=0 with epoch at vernal equinox should be at the sub solar point
 		check.is_true(np.all(np.isclose(unit_vector(o.pos[0]), unit_vector(o.sun_pos[0]), atol=0.01)))
 
-#TODO: add test of epoch remaining when sampling two orbits with same start time and one half the frequency of the other
+def test_fromAnalyiticalOrbitalParams_epoch_timespan_sampling():
+		'''
+		test that the epoch is kept consistent over different timespans when specified
+		'''
+
+		t0 = dt.datetime.fromisoformat('2026-01-12T23:34:18+00:00')
+
+		ts1 = timespan.TimeSpan(t0, '1M', '180M')
+		ts2 = timespan.TimeSpan(t0 + dt.timedelta(minutes=1), '2M', '180M')
+
+		o1 = orbit.Orbit.fromAnalyticalOrbitalParam(ts1, a=6378+400, ecc=0.2, inc=10, raan=18, argp=76, true_nu=23, epoch=ts1[0])
+		o2 = orbit.Orbit.fromAnalyticalOrbitalParam(ts2, a=6378+400, ecc=0.2, inc=10, raan=18, argp=76, true_nu=23, epoch=ts1[0])
+
+
+		check.is_true(
+			np.all(np.isclose(
+					o1.pos[1::2,:],
+					o2.pos[:-1,:],
+					atol=0.01
+				)))

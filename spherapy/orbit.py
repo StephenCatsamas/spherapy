@@ -4,6 +4,8 @@ This module provides:
 - OrbitAttrDict: A TypedDict typing the instance attributes of an Orbit
 - Orbit: A class of timestamped orbital data
 """
+from typing import Optional
+
 import datetime as dt
 import logging
 import pathlib
@@ -15,7 +17,6 @@ from typing import Any, TypedDict, cast
 from astropy import units as astropy_units
 from astropy.time import Time as astropyTime
 from hapsira.bodies import Earth, Mars, Moon, Sun
-from hapsira.constants import J2000
 from hapsira.ephem import Ephem
 from hapsira.twobody import Orbit as hapsiraOrbit
 import numpy as np
@@ -628,7 +629,7 @@ class Orbit:
 											raan:float=0,
 											argp:float=0,
 											true_nu:float=0,
-											epoch:dt.datetime|astropyTime=J2000,
+											epoch:Optional[dt.datetime]=None,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':
@@ -656,7 +657,7 @@ class Orbit:
 			true_nu: [Optional] true anomaly at epoch in degrees
 					Default is 0, which represents an orbit that is beginning at periapsis on the epoch
 			epoch: [Optional] epoch for orbit
-					Default is J2000
+					Default is the first timestep of the timespan
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
 			astrobodies: [Optional] Flag to calculate Sun and Moon positions at timestamps
@@ -714,10 +715,10 @@ class Orbit:
 			raise exceptions.OutOfRangeError(f"True anomaly, {true_nu}, is out of range, "
 										f"should be 0 < true_nu < 360")
 
+		if epoch is None:
+			epoch = timespan[0]
 		if isinstance(epoch, dt.datetime):
 			astropy_epoch = astropyTime(epoch, scale='utc')
-		elif isinstance(epoch, astropyTime):
-			astropy_epoch = epoch
 		else:
 			logger.error("epoch, %s must be of type dt.datetime|astropyTime but"
 											" is of type %s", epoch, type(epoch))
@@ -730,14 +731,14 @@ class Orbit:
 
 		logger.info("Creating analytical orbit")
 		orb = hapsiraOrbit.from_classical(
-											attractor=central_body,
-											a=a * astropy_units.one * astropy_units.km,
-											ecc=ecc * astropy_units.one,
-											inc=inc * astropy_units.one * astropy_units.deg,
-											raan=raan * astropy_units.one * astropy_units.deg,
-											argp=argp * astropy_units.one * astropy_units.deg,
-											nu=true_nu * astropy_units.one * astropy_units.deg,
-											epoch=astropy_epoch
+											central_body,
+											a * astropy_units.one * astropy_units.km,
+											ecc * astropy_units.one,
+											inc * astropy_units.one * astropy_units.deg,
+											raan * astropy_units.one * astropy_units.deg,
+											argp * astropy_units.one * astropy_units.deg,
+											true_nu * astropy_units.one * astropy_units.deg,
+											astropy_epoch
 											)
 
 
