@@ -4,8 +4,6 @@ This module provides:
 - OrbitAttrDict: A TypedDict typing the instance attributes of an Orbit
 - Orbit: A class of timestamped orbital data
 """
-from typing import Optional
-
 import datetime as dt
 import logging
 import pathlib
@@ -629,7 +627,7 @@ class Orbit:
 											raan:float=0,
 											argp:float=0,
 											true_nu:float=0,
-											epoch:Optional[dt.datetime]=None,
+											epoch:dt.datetime|None=None,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':

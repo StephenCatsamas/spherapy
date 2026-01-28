@@ -6,7 +6,7 @@ This module provides:
 import datetime as dt
 import logging
 
-from typing import cast
+from typing import cast, overload
 from typing_extensions import Self
 
 from astropy.time import Time as astropyTime
@@ -111,6 +111,16 @@ class TimeSpan:
 	def __call__(self) -> np.ndarray[tuple[int], np.dtype[np.datetime64]]:
 		"""Returns the internal _timearr when the TimeSpan is called."""
 		return self._timearr
+
+	@overload
+	def __getitem__(self, idx: None) -> np.ndarray[tuple[int], np.dtype[np.datetime64]]: ...
+
+	@overload
+	def __getitem__(self, idx: int | np.integer) -> dt.datetime: ...
+
+	@overload
+	def __getitem__(self, idx: slice | list[int] | tuple[int, ...] | np.ndarray) \
+						-> np.ndarray[tuple[int], np.dtype[np.datetime64]]: ...
 
 	def __getitem__(self, idx:None|int|np.integer|tuple|list|np.ndarray|slice=None) \
 						-> None|dt.datetime|np.ndarray[tuple[int], np.dtype[np.datetime64]]: 	# noqa: PLR0911
