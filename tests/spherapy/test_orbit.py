@@ -579,3 +579,5 @@ def test_epoch():
 
 		# an orbit with raan=argp=true_nu=0 with epoch at vernal equinox should be at the sub solar point
 		check.is_true(np.all(np.isclose(unit_vector(o.pos[0]), unit_vector(o.sun_pos[0]), atol=0.01)))
+
+#TODO: add test of epoch remaining when sampling two orbits with same start time and one half the frequency of the other
