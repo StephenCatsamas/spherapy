@@ -653,7 +653,8 @@ class Orbit:
 					Default is 0, which	represents an orbit with its semimajor axis in
 					the plane of the Earth's equator
 			true_nu: [Optional] true anomaly at epoch in degrees
-					Default is 0, which represents an orbit that is beginning at periapsis on the epoch
+					Default is 0, which represents an orbit that is beginning
+					at periapsis on the epoch
 			epoch: [Optional] epoch for orbit
 					Default is the first timestep of the timespan
 			name: [Optional] string giving the name of the orbit
