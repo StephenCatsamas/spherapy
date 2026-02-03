@@ -728,8 +728,7 @@ class Orbit:
 
 
 		logger.info("Creating analytical orbit")
-		orb = hapsiraOrbit.from_classical(
-											central_body,
+		orb = hapsiraOrbit.from_classical(central_body,
 											a * astropy_units.one * astropy_units.km,
 											ecc * astropy_units.one,
 											inc * astropy_units.one * astropy_units.deg,

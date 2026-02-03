@@ -61,6 +61,81 @@ def test_init():
 	check.equal(first_decade[-1], dt.datetime(2006,9,8, tzinfo=dt.timezone.utc))
 	check.equal(minimum_ts[-1], t0.replace(tzinfo=dt.timezone.utc) + dt.timedelta(seconds=1))
 
+def test_getitem():
+	t0 = dt.datetime(2013,5,17,11,45,23, tzinfo=dt.timezone.utc)
+	ts = TimeSpan(t0, '1S', '1M')
+
+	# NONE
+	item = ts[None]
+	check.is_true(isinstance(item, np.ndarray))
+	check.is_true(np.array_equal(item, ts._timearr))
+
+	# int
+	item = ts[1]
+	check.is_true(isinstance(item, dt.datetime))
+	check.equal(item, t0 + dt.timedelta(seconds=1))
+
+	with check.raises(IndexError):
+		item = ts[70]
+
+	# slice 
+	item = ts[1:4]
+	check.is_true(isinstance(item, np.ndarray))
+	check.equal(len(item), 3)
+	for rdt, edt in zip(item, [t0 + dt.timedelta(seconds=i) for i in range(1,4)]):
+		check.equal(rdt, edt)
+
+	# check that slice correctly crop the interval to valid range
+	item = ts[30:82]
+	check.equal(len(item), 31)
+	
+	# list[int] 
+	item = ts[[3,7,4]]
+	check.is_true(isinstance(item, np.ndarray))
+	check.equal(len(item), 3)
+	for rdt, edt in zip(item, [t0 + dt.timedelta(seconds=i) for i in [3,7,4]]):
+		check.equal(rdt, edt)
+
+	with check.raises(IndexError):
+		item = ts[[1,70]]
+
+	# np.ndarray
+	item = ts[np.array([3,7,4])]
+	check.is_true(isinstance(item, np.ndarray))
+	check.equal(len(item), 3)
+	for rdt, edt in zip(item, [t0 + dt.timedelta(seconds=i) for i in [3,7,4]]):
+		check.equal(rdt, edt)
+
+	with check.raises(IndexError):
+		item = ts[np.ndarray([1,70])]
+
+	# 2-tuple
+	item = ts[(5,20)]
+	check.is_true(isinstance(item, np.ndarray))
+	check.equal(len(item), 15)
+	for rdt, edt in zip(item, [t0 + dt.timedelta(seconds=i) for i in range(5,20)]):
+		check.equal(rdt, edt)
+
+	# check that 2-tuple correctly crop the interval to valid range
+	item = ts[(55,65)]
+	check.equal(len(item), 6)
+
+	# 3-tuple
+	item = ts[(5,20,3)]
+	check.is_true(isinstance(item, np.ndarray))
+	check.equal(len(item), 5)
+	for rdt, edt in zip(item, [t0 + dt.timedelta(seconds=i) for i in range(5,20,3)]):
+		check.equal(rdt, edt)
+
+	# check that 2-tuple correctly crop the interval to valid range
+	item = ts[(44, 62, 8)]
+	check.equal(len(item), 3)
+
+	with check.raises(TypeError):
+		item = ts[0.0]
+
+
+
 def test_len():
 	t0 = dt.datetime(2000,1,1,12,4,5)
 

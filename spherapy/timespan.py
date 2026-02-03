@@ -134,7 +134,7 @@ class TimeSpan:
 				return self._timearr[idx[0]:idx[1]]
 			return self._timearr[idx[0]:idx[1]:idx[2]]
 		if isinstance(idx, list):
-			return self._timearr[[idx]]
+			return self._timearr[idx]
 		if isinstance(idx, np.ndarray):
 			return self._timearr[idx]
 		if isinstance(idx,slice):
