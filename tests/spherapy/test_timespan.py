@@ -78,7 +78,7 @@ def test_getitem():
 	with check.raises(IndexError):
 		item = ts[70]
 
-	# slice 
+	# slice
 	item = ts[1:4]
 	check.is_true(isinstance(item, np.ndarray))
 	check.equal(len(item), 3)
@@ -88,8 +88,8 @@ def test_getitem():
 	# check that slice correctly crop the interval to valid range
 	item = ts[30:82]
 	check.equal(len(item), 31)
-	
-	# list[int] 
+
+	# list[int]
 	item = ts[[3,7,4]]
 	check.is_true(isinstance(item, np.ndarray))
 	check.equal(len(item), 3)
