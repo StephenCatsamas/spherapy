@@ -4,8 +4,6 @@ This module provides:
 - OrbitAttrDict: A TypedDict typing the instance attributes of an Orbit
 - Orbit: A class of timestamped orbital data
 """
-from typing import Optional
-
 import datetime as dt
 import logging
 import pathlib
