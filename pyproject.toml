@@ -15,7 +15,8 @@ dependencies = [
 		"spacetrack==1.2.0",
 		"keyring>=25.0.0",
 		"platformdirs==4.3.8",
-		"importlib_resources>=6.5.2"
+		"importlib_resources>=6.5.2",
+		"coverage>=7.6.1"
 	]
 
 requires-python = ">=3.10"
