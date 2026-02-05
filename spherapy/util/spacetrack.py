@@ -73,7 +73,7 @@ class _TLEGetter:
 			try:
 				opts = self._calcRequestAllOptions(sat_id)
 				logger.info("Requesting TLEs from spacetrack with following options: %s", opts)
-				resp_line_iterator = self.stc.tle(**opts)
+				resp_line_iterator = self.stc.gp_history(**opts)
 				resp_lines = list(resp_line_iterator)
 				tle_dict_list = elements_u.dictify3LEs(resp_lines)
 				self._writeTLEsToNewFile(sat_id, tle_dict_list)
@@ -111,7 +111,7 @@ class _TLEGetter:
 				if days_since_last_epoch > 0.0:
 					opts = self._calcRequestPartialOptions(sat_id)
 					logger.info("Requesting TLEs from spacetrack with following options: %s", opts)
-					resp_line_iterator = self.stc.tle(**opts)
+					resp_line_iterator = self.stc.gp_history(**opts)
 					resp_lines = list(resp_line_iterator)
 					tle_dict_list = elements_u.dictify3LEs(resp_lines)
 					self._writeTLEsToFile(sat_id, tle_dict_list)
