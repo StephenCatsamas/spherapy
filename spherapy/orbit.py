@@ -627,6 +627,7 @@ class Orbit:
 											raan:float=0,
 											argp:float=0,
 											true_nu:float=0,
+											epoch:dt.datetime|None=None,
 											name:str='Analytical',
 											astrobodies:bool=True,
 											unsafe:bool=False) -> 'Orbit':
@@ -651,8 +652,11 @@ class Orbit:
 			argp: [Optional] argument of the perigee in degrees
 					Default is 0, which	represents an orbit with its semimajor axis in
 					the plane of the Earth's equator
-			true_nu: [Optional] true anomaly at J2000 in degrees
-					Default is 0, which represents an orbit that is beginning at periapsis on J2000
+			true_nu: [Optional] true anomaly at epoch in degrees
+					Default is 0, which represents an orbit that is beginning
+					at periapsis on the epoch
+			epoch: [Optional] epoch for orbit
+					Default is the first timestep of the timespan
 			name: [Optional] string giving the name of the orbit
 					Default is 'Analytical'
 			astrobodies: [Optional] Flag to calculate Sun and Moon positions at timestamps
@@ -710,7 +714,19 @@ class Orbit:
 			raise exceptions.OutOfRangeError(f"True anomaly, {true_nu}, is out of range, "
 										f"should be 0 < true_nu < 360")
 
+		if epoch is None:
+			epoch = timespan[0]
+		if isinstance(epoch, dt.datetime):
+			astropy_epoch = astropyTime(epoch, scale='utc')
+		else:
+			logger.error("epoch, %s must be of type dt.datetime|astropyTime but"
+											" is of type %s", epoch, type(epoch))
+			raise TypeError(f"epoch, {epoch} must be of type "
+						f"dt.datetime|astropyTime but is of type {type(epoch)}")
+
 		attr_dct = _createEmptyOrbitAttrDict()
+
+
 
 		logger.info("Creating analytical orbit")
 		orb = hapsiraOrbit.from_classical(central_body,
@@ -719,7 +735,9 @@ class Orbit:
 											inc * astropy_units.one * astropy_units.deg,
 											raan * astropy_units.one * astropy_units.deg,
 											argp * astropy_units.one * astropy_units.deg,
-											true_nu * astropy_units.one * astropy_units.deg)
+											true_nu * astropy_units.one * astropy_units.deg,
+											astropy_epoch
+											)
 
 
 		logger.info("Creating ephemeris for orbit, using timespan")
