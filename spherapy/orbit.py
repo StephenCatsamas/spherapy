@@ -289,14 +289,14 @@ class Orbit:
 
 		if calc_astrobodies:
 			# Preserve the existing ephemeris time convention and geocentric frame.
-			epochs = self.timespan.asAstropy(scale='tdb')
-			frame = GCRS(obstime=epochs)
+			astrobody_ephem_epochs = self.timespan.asAstropy(scale='tdb')
+			frame = GCRS(obstime=astrobody_ephem_epochs)
 			logger.info('Creating ephemeris for Sun using timespan')
-			sun = ICRS(get_body_barycentric('sun', epochs)).transform_to(frame)
+			sun = ICRS(get_body_barycentric('sun', astrobody_ephem_epochs)).transform_to(frame)
 			self.sun_pos = sun.cartesian.xyz.to_value(astropy_units.km).T
 
 			logger.info('Creating ephemeris for Moon using timespan')
-			moon = ICRS(get_body_barycentric('moon', epochs)).transform_to(frame)
+			moon = ICRS(get_body_barycentric('moon', astrobody_ephem_epochs)).transform_to(frame)
 			self.moon_pos = moon.cartesian.xyz.to_value(astropy_units.km).T
 			self.eclipse = self._calcEclipse(self.pos, self.sun_pos)
 
